@@ -1,12 +1,40 @@
 {
   "collision-matrix": [
     [
+      true,
+      true,
       true
+    ],
+    [
+      true,
+      false
+    ],
+    [
+      true,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false
+    ],
+    [
+      false,
+      false,
+      false,
+      false,
+      false
     ]
   ],
   "excluded-modules": [],
   "group-list": [
-    "default"
+    "particles",
+    "single direction wall",
+    "blocked wall",
+    "accelerate wall",
+    "New Group 6"
   ],
   "start-scene": "2d2f792f-a40c-49bb-a189-ed176a246e49",
   "design-resolution-width": 640,

@@ -18,8 +18,10 @@ export default class GameScene extends cc.Component {
 
     onLoad () {
         cc.director.getPhysicsManager().enabled = true; // 开启了物理引擎
+        cc.director.getCollisionManager().enabled = true;
         // 独立的形状，打开一个调试区域,游戏图像的，逻辑区域;
         // 开始调试模式:
+        cc.director.getCollisionManager().enabledDebugDraw = this.is_debug;
         if (this.is_debug) { // 开启调试信息
             var Bits = cc.PhysicsManager.DrawBits; // 这个是我们要显示的类型
             cc.director.getPhysicsManager().debugDrawFlags = Bits.e_jointBit | Bits.e_shapeBit;
