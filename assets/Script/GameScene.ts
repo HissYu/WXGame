@@ -13,7 +13,13 @@ export default class GameScene extends cc.Component {
     @property
     is_debug = true;
     @property(cc.Vec2)
-    gravity:cc.Vec2 = new cc.Vec2(0, 0) // 系统默认的
+    gravity:cc.Vec2 = new cc.Vec2(0, 0)
+
+    @property
+    baseParticleLimit = 20;
+
+    baseParticleCount = 0;
+
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {

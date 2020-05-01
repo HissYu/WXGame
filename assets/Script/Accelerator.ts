@@ -38,7 +38,7 @@ export default class Accelerator extends cc.Component {
             p.parent = scene;
 
             p.setPosition(this.pSource);
-            (p.getComponent("Particle") as Particle).SetParticle('charged', v);
+            (p.getComponent("Particle") as Particle).ShootParticle(v);
 
         }
     }

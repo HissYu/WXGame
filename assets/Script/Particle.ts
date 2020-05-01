@@ -27,35 +27,79 @@ export default class Particle extends cc.Component {
         this.particleID = id;
 
         // console.log('after',this.velocity);
-        var rigidbody = this.getComponent(cc.RigidBody)
+        // var rigidbody = this.getComponent(cc.RigidBody)
 
         // rigidbody.applyLinearImpulse(this.velocity.mul(100), rigidbody.getLocalCenter(), true);
-        rigidbody.linearVelocity = this.velocity.multiplyScalar(600);
-        
-        
+    }
+    public ShootParticle(v:cc.Vec2){
+        this.SetParticle('charged',v);
+        var rigidbody = this.getComponent(cc.RigidBody)
+
+        rigidbody.linearVelocity = this.velocity.multiplyScalar(400);
+
     }
     public SetBounce(n: cc.Vec2){
 
     }
     onCollisionEnter(other:cc.Collider, self: cc.CircleCollider){
-        console.log('other', other);
-        console.log('self',this.captured,this.velocity);
+        var rigidbody = this.getComponent(cc.RigidBody)
+        if(other.node.parent.name ==='Accelerator'){
+            if(other.tag === 1){ // 左右碰撞
+                var t = cc.mat4(-1,0,0,0,
+                                0,1,0,0,
+                                0,0,1,0,
+                                0,0,0,1)
+
+                rigidbody.linearVelocity = rigidbody.linearVelocity.transformMat4(t);
+
+            }else if(other.tag === 0){ // 上下碰撞
+                var t = cc.mat4(1,0,0,0,
+                                0,-1,0,0,
+                                0,0,1,0,
+                                0,0,0,1)
+
+                rigidbody.linearVelocity = rigidbody.linearVelocity.transformMat4(t);
+            }
+            else if(other.tag === 2){ // 加速
+                if(!this.captured){
+                    var t = cc.mat4(2,0,0,0,
+                                    0,2,0,0,
+                                    0,0,2,0,
+                                    0,0,0,1)
+                    
+                    rigidbody.linearVelocity = rigidbody.linearVelocity.transformMat4(t);
+                }
+            }
+        }
         if(other.node.parent.name ==='Reactor'){
             if(this.captured){
-                if(other.tag === 1){
+                if(other.tag === 1){ // 左右碰撞
+                    var t = cc.mat4(-1,0,0,0,
+                                    0,1,0,0,
+                                    0,0,1,0,
+                                    0,0,0,1)
+
                     var v =this.velocity;
-                    v.x = -v.x;
+
+                    rigidbody.linearVelocity = rigidbody.linearVelocity.transformMat4(t);
                     this.SetParticle('inert',v);
-                }else if(other.tag === 0){
+                }else if(other.tag === 0){ // 上下碰撞
+                    var t = cc.mat4(1,0,0,0,
+                                    0,-1,0,0,
+                                    0,0,1,0,
+                                    0,0,0,1)
+
                     var v =this.velocity;
-                    v.y = -v.y;
+                    rigidbody.linearVelocity = rigidbody.linearVelocity.transformMat4(t);
+
                     this.SetParticle('inert',v);
                 }
             }else{
                 this.captured = true;
             }
         }
-        console.log('self',this.captured,this.velocity);
+        
+        // console.log('self',this.captured,this.velocity);
         
         // other.
     }
@@ -66,21 +110,25 @@ export default class Particle extends cc.Component {
     start () {
         
     }
-
+    
     update (dt) {
         var forceMultipler = 2;
         var rigidbody = this.getComponent(cc.RigidBody)
+        // rigidbody.linearVelocity = this.velocity.multiplyScalar(rigidbody.linearVelocity.mag());
+
         switch(this.status){
             case 'charged':
                 // forceMultipler = 5;
                 rigidbody.linearDamping = 0;
                 // rigidbody.linearVelocity = this.velocity.multiplyScalar(forceMultipler);
+        // rigidbody.linearVelocity = this.velocity.multiplyScalar(600);
 
                 break;
             case 'normal':
                 // forceMultipler = 2;
                 rigidbody.linearDamping = 0;
                 // rigidbody.linearVelocity = this.velocity.multiplyScalar(forceMultipler);
+        // rigidbody.linearVelocity = this.velocity.multiplyScalar(400);
 
                 break;
             case 'inert':
