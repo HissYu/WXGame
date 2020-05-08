@@ -42,6 +42,8 @@ export default class Particle extends cc.Component {
 
     }
     onCollisionEnter(other:cc.Collider, self: cc.CircleCollider){
+        console.log(other.node.parent.name);
+        
         var rigidbody = this.getComponent(cc.RigidBody)
         if(other.node.parent.name ==='Accelerator'){
             if(other.tag === 1){ // 左右碰撞
@@ -95,10 +97,14 @@ export default class Particle extends cc.Component {
                     this.SetParticle('inert',v);
                 }
             }else{
-                this.captured = true;
+                this.captured = true; // TODO: better capture process to be done
             }
         }
-        
+        if(other.node.parent.name ==='game'){
+            console.log('out of sight');
+            
+            this.destroy();
+        }
         // console.log('self',this.captured,this.velocity);
         
         // other.

@@ -6,6 +6,7 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import Particle from "./Particle";
+import GameScene from "./GameScene";
 
 const { ccclass, property } = cc._decorator;
 
@@ -39,7 +40,7 @@ export default class Accelerator extends cc.Component {
 
             p.setPosition(this.pSource);
             (p.getComponent("Particle") as Particle).ShootParticle(v);
-
+            (scene.getChildByName("Canvas").getComponent("GameScene") as GameScene).baseParticleCount++;
         }
     }
     // LIFE-CYCLE CALLBACKS:

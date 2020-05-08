@@ -5,6 +5,8 @@
 // Learn life-cycle callbacks:
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
+import Particle from "./Particle";
+
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -15,10 +17,15 @@ export default class GameScene extends cc.Component {
     @property(cc.Vec2)
     gravity:cc.Vec2 = new cc.Vec2(0, 0)
 
+
+    @property(cc.Prefab)
+    particleObject: cc.Prefab = null;
     @property
     baseParticleLimit = 20;
 
-    baseParticleCount = 0;
+    baseParticleCount = 0;  
+
+    createParticleTimer = null;
 
     // LIFE-CYCLE CALLBACKS:
 
@@ -38,9 +45,31 @@ export default class GameScene extends cc.Component {
         cc.director.getPhysicsManager().gravity = this.gravity;
     }
 
-    start () {
+    createParticle(){
+        var scene = cc.director.getScene();
+        let p = cc.instantiate(this.particleObject);
+        var v = cc.v2(0,0);
+        cc.Vec2.random(v);
+        p.parent = scene;
 
+        p.setPosition(59,559); // TODO: random position out of sight
+        (p.getComponent("Particle") as Particle).ShootParticle(v);
+        this.baseParticleCount++;
+        
     }
 
-    // update (dt) {}
+    start () {
+        console.log(this);
+        
+    }
+    update (dt) {
+        if(this.baseParticleCount>=this.baseParticleLimit){
+            clearInterval(this.createParticleTimer)
+            this.createParticleTimer = null;
+        }else{
+            if(this.createParticleTimer==null){
+                this.createParticleTimer = setInterval(this.createParticle.bind(this),500)
+            }
+        }
+    }
 }
